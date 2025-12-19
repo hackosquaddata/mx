@@ -112,30 +112,23 @@ export default function Certification() {
               <SparklesIcon className="h-4 w-4" /> Limited Time Offer
             </div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-slate-100">Exam Voucher Pricing</h2>
-            <p className="mt-2 text-slate-300 max-w-2xl mx-auto text-sm">Get 90% discount for the first 100 users. Don't miss out on this exclusive opportunity!</p>
-            
-            <div className="mt-8 grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-              {/* Original Price */}
-              <div className="rounded-xl bg-white/5 border border-white/10 p-6">
-                <div className="text-slate-400 text-sm">Regular Price</div>
-                  <div className="mt-2 text-2xl font-bold text-slate-300">₹17,999</div>
-                <div className="text-xs text-slate-500 mt-1">Full price for regular access</div>
-              </div>
-
-              {/* Discounted Price */}
+            <p className="mt-2 text-slate-300 max-w-2xl mx-auto text-sm">Get <span className="text-emerald-300 font-bold">50% OFF</span> for the first 100 users. Don't miss out on this exclusive opportunity!</p>
+            <div className="mt-8 max-w-md mx-auto">
               <div className="rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 border border-emerald-400/30 p-6 relative">
                 <div className="absolute -top-3 right-4 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-500/20 border border-red-400/30 text-red-200 text-xs font-semibold">
-                  <SparklesIcon className="h-3 w-3" /> 90% OFF
+                  <SparklesIcon className="h-3 w-3" /> 50% OFF
                 </div>
                 <div className="text-emerald-300 text-sm font-semibold">First 100 Users</div>
-                  <div className="mt-2 text-3xl font-extrabold text-emerald-300">₹1,799</div>
-                  <div className="text-xs text-emerald-200/70 mt-1">Save ₹16,200</div>
+                <div className="mt-2 flex flex-col items-center">
+                  <span className="text-xl text-slate-400 line-through">₹3,599</span>
+                  <span className="text-3xl font-extrabold text-emerald-300 mt-1">₹1,799</span>
+                </div>
+                <div className="text-xs text-emerald-200/70 mt-1">Limited time: 50% OFF for first 100 users!</div>
                 <Link to="/signup" className="mt-4 w-full px-4 py-2 rounded-lg bg-emerald-500/30 text-emerald-100 border border-emerald-400/40 hover:bg-emerald-500/40 font-semibold text-sm inline-block">Claim Your Offer Now</Link>
               </div>
             </div>
-
             <p className="mt-6 text-xs text-slate-400">
-              ⏱️ <strong>Hurry!</strong> Only available for the first 100 exam takers. Once the quota is filled, pricing will return to ₹14,999.
+              ⏱️ <strong>Hurry!</strong> Only available for the first 100 exam takers. Once the quota is filled, pricing will return to a higher rate.
             </p>
           </div>
         </div>
