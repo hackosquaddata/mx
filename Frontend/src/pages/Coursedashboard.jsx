@@ -279,7 +279,7 @@ export default function CourseDashboard() {
           </div>
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <div className="text-sm font-medium text-slate-100 mb-2">Need help?</div>
-            <div className="text-sm text-slate-300">Visit <button onClick={() => navigate('/profile')} className="text-emerald-300 hover:text-emerald-200 underline">Profile</button> or email <a className="text-emerald-300 hover:text-emerald-200" href="mailto:support@maxsec.acadmy">support@maxsec.acadmy</a>.</div>
+            <div className="text-sm text-slate-300">Visit <button onClick={() => navigate('/profile')} className="text-emerald-300 hover:text-emerald-200 underline">Profile</button> or email <a className="text-emerald-300 hover:text-emerald-200" href="mailto:officialmnhz@gmail.com">officialmnhz@gmail.com</a>.</div>
           </div>
         </div>
 
