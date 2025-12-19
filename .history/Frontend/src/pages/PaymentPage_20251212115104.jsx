@@ -160,94 +160,29 @@ export default function PaymentPage() {
 			<Sidebar />
 			<div className="flex-1 p-6">
 				<div className="max-w-6xl mx-auto">
-					<div className="mb-5 flex items-end justify-between">
-						<div>
-							<h1 className="text-xl font-semibold text-slate-100 flex items-center gap-2">
-								Secure Checkout
-								<span className="inline-flex items-center rounded-full border border-emerald-400/40 bg-emerald-500/10 px-2 py-0.5 text-[11px] text-emerald-200">
-									Save ₹{directDiscount} with UPI
-								</span>
-							</h1>
-							<div className="text-xs text-slate-500">Multiple payment options • Instant verification</div>
+					{/* Free/Paid course logic UI */}
+					<div className="mb-5">
+					  {isFreeCourse ? (
+						<div className="text-center">
+						  <h3 className="text-lg font-bold text-emerald-400 mb-2">This course is free!</h3>
+						  <button
+							className="px-6 py-3 rounded-lg bg-emerald-500 text-white font-semibold text-base mt-2 shadow-lg hover:bg-emerald-600 transition-all disabled:opacity-60"
+							onClick={enrollFree}
+							disabled={submitting}
+						  >
+							{submitting ? 'Enrolling…' : 'Enroll Now For Free'}
+						  </button>
 						</div>
-						<div className="hidden sm:block text-xs text-slate-500">Questions? Contact support via WhatsApp</div>
+					  ) : (
+						<>
+						  <div className="text-center mb-4">
+							<h3 className="text-lg font-bold text-slate-100 mb-1">Pay Securely Online</h3>
+							<p className="text-sm text-slate-400">Multiple payment options available</p>
+						  </div>
+						  {/* ...existing payment UI for paid courses goes here... */}
+						</>
+					  )}
 					</div>
-
-					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-						<div className="lg:col-span-2 space-y-6">
-					{/* 1. Confirm your details */}
-						<div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-							<div className="flex items-start gap-3 mb-2">
-								<div className="h-7 w-7 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-200 flex items-center justify-center text-sm font-semibold">1</div>
-								<h1 className="text-lg font-semibold text-slate-100">Your Information</h1>
-							</div>
-							<p className="text-sm text-slate-400 mb-6">Enter your details to proceed to payment</p>
-							<div className="grid grid-cols-1 gap-4">
-								<div>
-									<label className="block text-xs text-slate-400 font-medium mb-1">Full Name <span className="text-red-400">*</span></label>
-									<input
-										className={`w-full rounded-lg bg-black/30 border p-2.5 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ${nameOk ? 'border-white/10' : 'border-red-500/40'}`}
-										value={form.name}
-										onChange={e => setForm({ ...form, name: e.target.value })}
-										placeholder="John Doe"
-										aria-invalid={!nameOk}
-									/>
-								</div>
-								<div>
-									<label className="block text-xs text-slate-400 font-medium mb-1">Email Address <span className="text-red-400">*</span></label>
-									<input
-										className={`w-full rounded-lg bg-black/30 border p-2.5 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ${emailOk ? 'border-white/10' : 'border-red-500/40'}`}
-										value={form.email}
-										onChange={e => setForm({ ...form, email: e.target.value })}
-										placeholder="you@example.com"
-										type="email"
-										aria-invalid={!emailOk}
-									/>
-									<div className="mt-1.5 text-[11px] text-slate-500">Course access link will be sent to this email</div>
-								</div>
-								<div>
-									<label className="block text-xs text-slate-400 font-medium mb-1">Coupon Code <span className="text-slate-500">(Optional)</span> <span className="text-emerald-300 font-bold ml-2">50% OFF for first 100 users, no code needed</span></label>
-									<input
-										className="w-full rounded-lg bg-black/30 border border-white/10 p-2.5 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 uppercase"
-										value={form.coupon}
-										onChange={e => setForm({ ...form, coupon: e.target.value.toUpperCase() })}
-										placeholder="Enter discount code"
-									/>
-									<div className="mt-1.5 text-[11px] text-slate-500">Discounts applied automatically at checkout. <span className="text-emerald-300 font-bold">No code needed</span></div>
-								</div>
-							</div>
-							<div className="mt-6 flex justify-end items-center gap-3">
-								<button className="px-4 py-2 rounded-lg bg-black/30 border border-white/10 hover:bg-black/50 transition-colors text-sm" onClick={() => navigate(-1)}>Cancel</button>
-								<button
-									className={`px-5 py-2.5 rounded-lg border font-medium text-sm transition-all ${canContinue ? 'bg-emerald-500 text-white border-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/25' : 'bg-white/5 text-slate-400 border-white/10 cursor-not-allowed'}`}
-									onClick={startCheckout}
-									disabled={!canContinue || submitting}
-								>
-									{submitting ? 'Processing…' : 'Continue to Payment'}
-								</button>
-							</div>
-						</div>
-
-					{/* 2. Pay the amount */}
-					{session && (
-						<div className="space-y-6">
-							{/* Payer confirmation card */}
-							<div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-								<h2 className="text-base font-semibold text-slate-100 mb-3 flex items-center gap-2">
-									<svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-									</svg>
-									Billing Information
-								</h2>
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-									<div className="bg-black/20 rounded-lg p-3">
-										<div className="text-slate-500 text-xs mb-1">Name</div>
-										<div className="text-slate-100 font-medium">{form.name || '—'}</div>
-									</div>
-									<div className="bg-black/20 rounded-lg p-3">
-										<div className="text-slate-500 text-xs mb-1">Email</div>
-										<div className="text-slate-100 font-medium break-all">{form.email || '—'}</div>
-									</div>
 								</div>
 								<button className="mt-3 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-xs transition-colors" onClick={() => setStep(1)}>
 									Edit Information
@@ -258,7 +193,7 @@ export default function PaymentPage() {
 								<div className="text-slate-300">{session.course_title}</div>
 								<div className="mt-2 grid grid-cols-[80px_1fr] gap-4 items-center">
 									<img src={session.thumbnail || '/placeholder-course.png'} alt="course" className="w-20 h-14 object-cover rounded border border-white/10" />
-									<div className="text-sm text-slate-400">Amount <span className="text-slate-200">₹{method === 'DIRECT' ? payable : baseAmountBeforeDirect}</span> {session.discount_percent ? <span className="ml-2 text-emerald-300">({session.discount_percent}% off)</span> : null} <span className="text-emerald-300 font-bold ml-2">50% OFF for first 100 users, no code needed</span></div>
+									<div className="text-sm text-slate-400">Amount <span className="text-slate-200">₹{method === 'DIRECT' ? payable : baseAmountBeforeDirect}</span> {session.discount_percent ? <span className="ml-2 text-emerald-300">({session.discount_percent}% off)</span> : null} <span className="text-emerald-300 font-bold ml-2">USE code MAXSEC90 TO get off</span></div>
 								</div>
 							</div>
 

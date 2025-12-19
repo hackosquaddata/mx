@@ -217,9 +217,9 @@ export default function Landing() {
                   <p className="text-slate-300 text-sm mb-4"><strong>Enroll in our comprehensive MJPT course</strong> featuring video tutorials, detailed presentations, and hands-on labs on Linux & Windows environments.</p>
                   
                   <div className="bg-emerald-500/10 border border-emerald-400/30 rounded-lg p-3 mb-4">
-                    <div className="text-emerald-300 font-semibold text-sm">✨ Special Offer <span className="text-emerald-200 font-bold ml-2">50% OFF for first 100 users, no code needed</span></div>
+                    <div className="text-emerald-300 font-semibold text-sm">✨ Special Offer <span className="text-emerald-200 font-bold ml-2">USE code MAXSEC90 TO get off</span></div>
                     <div className="text-slate-300 text-xs mt-1">Get a <strong>FREE MJPT Exam Voucher</strong> when you enroll</div>
-                    <div className="text-emerald-300 text-xs mt-1 font-semibold">50% OFF for first 100 users, no code needed</div>
+                    <div className="text-emerald-300 text-xs mt-1 font-semibold">90% OFF for first 100 users <span className="text-emerald-200 font-bold ml-2">USE code MAXSEC90 TO get off</span></div>
                   </div>
                 </div>
 
@@ -387,8 +387,8 @@ export default function Landing() {
 
               {/* Offer Badge */}
               <div className="bg-red-500/10 border border-red-400/30 rounded-lg p-3 mb-6">
-                <div className="text-red-200 text-xs font-semibold mb-1">⚡ LIMITED TIME OFFER <span className="text-emerald-200 font-bold ml-2">50% OFF for first 100 users, no code needed</span></div>
-                <div className="text-emerald-300 text-lg font-extrabold">50% OFF <span className="text-emerald-200 font-bold ml-2">No code needed</span></div>
+                <div className="text-red-200 text-xs font-semibold mb-1">⚡ LIMITED TIME OFFER <span className="text-emerald-200 font-bold ml-2">USE code MAXSEC90 TO get off</span></div>
+                <div className="text-emerald-300 text-lg font-extrabold">90% OFF <span className="text-emerald-200 font-bold ml-2">USE code MAXSEC90 TO get off</span></div>
                 <div className="text-slate-400 text-xs">First 100 users only!</div>
               </div>
 

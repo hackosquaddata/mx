@@ -49,96 +49,38 @@ export default function PaymentPage() {
 			`Course: ${session?.course_title || 'N/A'}%0A` +
 			`Amount: ₹${session ? payable : ''}%0A` +
 			`Name: ${form.name || ''}%0A` +
-			`Email: ${form.email || ''}%0A` +
-			`${session?.checkout?.coupon ? `Coupon: ${session.checkout.coupon}%0A` : ''}` +
-			`Payment Method: ${method === 'DIRECT' ? 'Direct UPI/Bank' : 'PhonePe'}%0A` +
-			`Transaction/UTR (if available): ${proof.transaction_id || ''}%0A%0A` +
-			`Attaching screenshot…`
-		);
-		return `https://wa.me/${SUPPORT_WA}?text=${msg}`;
-	}, [SUPPORT_WA, session, form, proof, method, payable]);
-
-	// Quick helper to copy text to clipboard with graceful fallback
-	const copyToClipboard = async (text, label = 'Copied') => {
-		if (!text) return;
-		try {
-			await navigator.clipboard.writeText(text);
-			toast.success(`${label}`);
-		} catch (e) {
-			try {
-				const el = document.createElement('textarea');
-				el.value = text;
-				document.body.appendChild(el);
-				el.select();
-				document.execCommand('copy');
-				document.body.removeChild(el);
-				toast.success(`${label}`);
-			} catch {
-				toast.error('Failed to copy');
+			// Place the conditional at the top level, before any JSX or return
+			if (isFreeCourse) {
+				return (
+					<div className="flex min-h-screen bg-gradient-to-br from-[#0a0f14] via-[#0a0f14] to-black text-slate-100">
+						<Sidebar />
+						<div className="flex-1 flex flex-col items-center justify-center">
+							<div className="max-w-md w-full bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
+								<h2 className="text-2xl font-bold text-emerald-400 mb-4">This course is free!</h2>
+								<p className="mb-6 text-slate-300">No payment required. Click below to enroll instantly.</p>
+								<button
+									className="px-8 py-3 rounded-lg bg-emerald-500 text-white font-semibold text-lg shadow-lg hover:bg-emerald-600 transition-all disabled:opacity-60"
+									onClick={enrollFree}
+									disabled={submitting}
+								>
+									{submitting ? 'Enrolling…' : 'Enroll Now For Free'}
+								</button>
+							</div>
+						</div>
+					</div>
+				);
 			}
-		}
-	};
-
-	useEffect(() => {
-		// Prefill name/email from stored user to make it quicker
-		try {
-			const u = JSON.parse(localStorage.getItem('user') || '{}');
-			setForm((prev) => ({
-				...prev,
-				name: prev.name || u.full_name || '',
-				email: prev.email || u.email || ''
-			}));
-		} catch {}
-	}, [courseId]);
-
-	const startCheckout = async () => {
-		if (!canContinue) {
-			toast.error('Please enter your name and a valid email');
-			return;
-		}
-		try {
-			setSubmitting(true);
-			const token = localStorage.getItem('token');
-			const res = await fetch(`${API_BASE}/api/payments/checkout/${courseId}`, {
-				method: 'POST',
-				headers: {
-					'Authorization': `Bearer ${token}`,
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(form)
-			});
-			if (!res.ok) {
-				const err = await res.json().catch(() => ({}));
-				toast.error(err.message || 'Failed to start checkout');
-				return;
-			}
-			const data = await res.json();
-			setSession(data);
-			setStep(2);
-		} catch (err) {
-			toast.error('Failed to start checkout');
-		} finally {
-			setSubmitting(false);
-		}
-	};
-
-	const submitProof = async () => {
-		if (!proof.transaction_id && !proof.receipt_email) {
-			return toast.error('Provide transaction ID or receipt email');
-		}
-		try {
-			setSubmitting(true);
-			const token = localStorage.getItem('token');
-			const res = await fetch(`${API_BASE}/api/payments/submit/${courseId}`, {
-				method: 'POST',
-				headers: {
-					'Authorization': `Bearer ${token}`,
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					...proof,
-					payment_method: method === 'DIRECT' ? 'UPI' : 'PHONEPE',
-					coupon: session?.checkout?.coupon || undefined
+			// Otherwise, show normal payment UI
+			return (
+				<div className="flex min-h-screen bg-gradient-to-br from-[#0a0f14] via-[#0a0f14] to-black text-slate-100">
+					<Sidebar />
+					<div className="flex-1 p-6">
+						<div className="max-w-6xl mx-auto">
+							{/* ...existing payment UI and sidebar code... */}
+						</div>
+					</div>
+				</div>
+			);
 				})
 			});
 			const data = await res.json().catch(() => ({}));
@@ -206,14 +148,14 @@ export default function PaymentPage() {
 									<div className="mt-1.5 text-[11px] text-slate-500">Course access link will be sent to this email</div>
 								</div>
 								<div>
-									<label className="block text-xs text-slate-400 font-medium mb-1">Coupon Code <span className="text-slate-500">(Optional)</span> <span className="text-emerald-300 font-bold ml-2">50% OFF for first 100 users, no code needed</span></label>
+									<label className="block text-xs text-slate-400 font-medium mb-1">Coupon Code <span className="text-slate-500">(Optional)</span> <span className="text-emerald-300 font-bold ml-2">USE code <span className="underline">MAXSEC90</span> to get <span className="text-emerald-200 font-bold">90% off</span> for first 100 users only</span></label>
 									<input
 										className="w-full rounded-lg bg-black/30 border border-white/10 p-2.5 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 uppercase"
 										value={form.coupon}
 										onChange={e => setForm({ ...form, coupon: e.target.value.toUpperCase() })}
 										placeholder="Enter discount code"
 									/>
-									<div className="mt-1.5 text-[11px] text-slate-500">Discounts applied automatically at checkout. <span className="text-emerald-300 font-bold">No code needed</span></div>
+									<div className="mt-1.5 text-[11px] text-slate-500">Discounts applied automatically at checkout. <span className="text-emerald-300 font-bold">USE code MAXSEC90 TO get off</span></div>
 								</div>
 							</div>
 							<div className="mt-6 flex justify-end items-center gap-3">
@@ -258,7 +200,7 @@ export default function PaymentPage() {
 								<div className="text-slate-300">{session.course_title}</div>
 								<div className="mt-2 grid grid-cols-[80px_1fr] gap-4 items-center">
 									<img src={session.thumbnail || '/placeholder-course.png'} alt="course" className="w-20 h-14 object-cover rounded border border-white/10" />
-									<div className="text-sm text-slate-400">Amount <span className="text-slate-200">₹{method === 'DIRECT' ? payable : baseAmountBeforeDirect}</span> {session.discount_percent ? <span className="ml-2 text-emerald-300">({session.discount_percent}% off)</span> : null} <span className="text-emerald-300 font-bold ml-2">50% OFF for first 100 users, no code needed</span></div>
+									<div className="text-sm text-slate-400">Amount <span className="text-slate-200">₹{method === 'DIRECT' ? payable : baseAmountBeforeDirect}</span> {session.discount_percent ? <span className="ml-2 text-emerald-300">({session.discount_percent}% off)</span> : null} <span className="text-emerald-300 font-bold ml-2">USE code MAXSEC90 TO get off</span></div>
 								</div>
 							</div>
 

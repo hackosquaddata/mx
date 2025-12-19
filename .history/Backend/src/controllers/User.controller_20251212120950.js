@@ -186,27 +186,11 @@ const calculateAverageProgress = (courses) => {
 const getCourse = async (req,res)=>{
 
   try {
-    const { error, data: courses } = await supabase.from('courses').select('*');
-    if (error) return res.status(400).json({ error: error.message });
+    const {error,data}=await supabase.from("courses").select("*");
 
-    // Fetch active enrollments to compute enrolled counts per course
-    const { data: enrollments } = await supabaseAdmin
-      .from('enrollments')
-      .select('course_id')
-      .eq('status', 'active');
+    if(error) return res.status(400).json({error:error.message});
 
-    const enrollMap = (enrollments || []).reduce((acc, e) => {
-      acc[e.course_id] = (acc[e.course_id] || 0) + 1;
-      return acc;
-    }, {});
-
-    const enriched = (courses || []).map(c => ({
-      ...c,
-      duration: c.duration ?? null,
-      enrolledCount: enrollMap[c.id] || 0
-    }));
-
-    res.status(200).json(enriched);
+    res.status(200).json(data)
   }
    catch (error) {
     
@@ -225,21 +209,7 @@ const getCourseById = async (req, res) => {
       .single();
 
     if (error) return res.status(404).json({ message: 'Course not found', error: error.message });
-
-    // compute active enrollment count for this course
-    const { data: enrollmentsForCourse } = await supabaseAdmin
-      .from('enrollments')
-      .select('id')
-      .eq('course_id', courseId)
-      .eq('status', 'active');
-
-    const enrolledCount = (enrollmentsForCourse || []).length;
-
-    res.status(200).json({
-      ...data,
-      duration: data.duration ?? null,
-      enrolledCount
-    });
+    res.status(200).json(data);
   } catch (err) {
     console.error('getCourseById error:', err);
     res.status(500).json({ message: 'Failed to fetch course', error: err.message });
@@ -567,6 +537,55 @@ const forgotPassword = async (req, res) => {
     });
   }
 };
+// Enroll the authenticated user into a free course (price === 0)
+const enrollFreeCourse = async (req, res) => {
+  try {
+    const user = req.user;
+    const { courseId } = req.body || {};
+    if (!user || !user.id) return res.status(401).json({ message: 'Unauthorized' });
+    if (!courseId) return res.status(400).json({ message: 'courseId is required' });
+
+    // Fetch course and verify price is exactly 0 (trusted source)
+    const { data: course, error: courseError } = await supabase
+      .from('courses')
+      .select('id, price, status')
+      .eq('id', courseId)
+      .single();
+
+    if (courseError || !course) return res.status(404).json({ message: 'Course not found' });
+    if (Number(course.price) !== 0) return res.status(403).json({ message: 'This course is not free' });
+    if (course.status !== 'active') return res.status(403).json({ message: 'Course is not active' });
+
+    // Check existing enrollment
+    const { data: existing } = await supabase
+      .from('enrollments')
+      .select('id, status')
+      .eq('user_id', user.id)
+      .eq('course_id', courseId)
+      .single();
+
+    if (existing && existing.status === 'active') {
+      return res.status(400).json({ message: 'Already enrolled' });
+    }
+
+    // Insert active enrollment using admin client to bypass RLS
+    const { data: inserted, error: insertError } = await supabaseAdmin
+      .from('enrollments')
+      .insert([{ user_id: user.id, course_id: courseId, status: 'active' }])
+      .select()
+      .single();
+
+    if (insertError) {
+      console.error('Failed to create enrollment:', insertError);
+      return res.status(500).json({ message: 'Failed to enroll' });
+    }
+
+    return res.status(201).json({ message: 'Enrolled successfully', enrollment: inserted });
+  } catch (err) {
+    console.error('enrollFreeCourse error:', err);
+    return res.status(500).json({ message: 'Failed to enroll' });
+  }
+};
 
 export { 
   signupUser, 
@@ -576,5 +595,6 @@ export {
   checkCourseAccess,
   getEnrolledCourses,
   forgotPassword,
-  getCourseById
+  getCourseById,
+  enrollFreeCourse
 };
