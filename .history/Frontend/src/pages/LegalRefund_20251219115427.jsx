@@ -86,7 +86,7 @@ export default function LegalRefund() {
               <p>If you believe your situation qualifies under the exceptions listed above, please follow these steps:</p>
               <ol className="list-decimal list-inside space-y-3 ml-4">
                 <li>
-                  <strong className="text-slate-200">Contact Support:</strong> Email us at <a href="mailto:support@maxsec.tech" className="text-emerald-300 hover:text-emerald-200 underline">support@maxsec.tech</a> or <a href="mailto:officialmnhz@gmail.com" className="text-emerald-300 hover:text-emerald-200 underline">officialmnhz@gmail.com</a>
+                  <strong className="text-slate-200">Contact Support:</strong> Email us at <a href="mailto:officialmnhz@gmail.com" className="text-emerald-300 hover:text-emerald-200 underline">officialmnhz@gmail.com</a>
                 </li>
                 <li>
                   <strong className="text-slate-200">Provide Details:</strong> Include your order number, transaction ID, course name, and a detailed explanation of the issue
@@ -181,7 +181,7 @@ export default function LegalRefund() {
             <div className="space-y-3 text-slate-300">
               <p>If you have any questions about our Refund & Cancellation Policy, please contact us:</p>
               <div className="space-y-2">
-                <p><strong className="text-slate-200">Email:</strong> <a href="mailto:support@maxsec.tech" className="text-emerald-300 hover:text-emerald-200 underline">support@maxsec.tech</a></p>
+                {/* Email removed as requested */}
                 <p><strong className="text-slate-200">Alternative Email:</strong> <a href="mailto:officialmnhz@gmail.com" className="text-emerald-300 hover:text-emerald-200 underline">officialmnhz@gmail.com</a></p>
                 <p><strong className="text-slate-200">Website:</strong> <a href="https://maxsec.tech" className="text-emerald-300 hover:text-emerald-200 underline">https://maxsec.tech</a></p>
               </div>

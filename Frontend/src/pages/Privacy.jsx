@@ -40,7 +40,7 @@ export default function Privacy() {
         <ul className="list-none ml-0 space-y-1 text-sm text-slate-300 mt-2">
           <li><strong>Phone:</strong> 7039108259</li>
           <li><strong>Email:</strong> <a className="text-emerald-300" href="mailto:officialmnhz@gmail.com">officialmnhz@gmail.com</a></li>
-          <li><strong>Email:</strong> <a className="text-emerald-300" href="mailto:support@maxsec.tech">support@maxsec.tech</a></li>
+          {/* Email removed as requested */}
         </ul>
       </section>
 

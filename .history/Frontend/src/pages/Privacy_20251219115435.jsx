@@ -30,7 +30,17 @@ export default function Privacy() {
         <h2 className="text-lg font-semibold mb-2">Data Rights</h2>
         <ul className="list-disc ml-6 space-y-1 text-sm text-slate-300">
           <li>You can request access, correction, or deletion of your personal data.</li>
-          <li>Contact support@maxsec.academy to make a request.</li>
+          <li>To make a request, please contact us using one of the options below.</li>
+        </ul>
+      </section>
+
+      <section className="mb-6">
+        <h2 className="text-lg font-semibold mb-2">Contact</h2>
+        <p className="text-sm text-slate-300">For privacy requests, support, or payment queries reach us at:</p>
+        <ul className="list-none ml-0 space-y-1 text-sm text-slate-300 mt-2">
+          <li><strong>Phone:</strong> 7039108259</li>
+          <li><strong>Email:</strong> <a className="text-emerald-300" href="mailto:officialmnhz@gmail.com">officialmnhz@gmail.com</a></li>
+          {/* Email removed as requested */}
         </ul>
       </section>
 
